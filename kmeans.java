@@ -34,6 +34,8 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
+//We use helpful classes written early by Andrew and Jama, a simple matrix library
+//link found here: https://math.nist.gov/javanumerics/jama/
 import Jama.*;
 import general.Super_random;
 import general.Pair;
@@ -125,7 +127,7 @@ public class kmeans {
 		return C;
 	}
 	
-	//norm(v1-v2)^2
+	//calculates norm(v1-v2)^2
 	static double twovecsubthennormsquared(ArrayList<Double> v1, ArrayList<Double> v2)
 	{
 		assert(v1.size() == v2.size());
@@ -158,6 +160,7 @@ public class kmeans {
 		return new Pair<Integer, Double>(best_j, best_value);
 	}
 	
+	//sum of the euclidean distances with points and their closest cluster center.
 	static double getLloydObjective(ArrayList<ArrayList<Double>> points, ArrayList<ArrayList<Double>> cluster_centers)
 	{
 		double total = 0;
@@ -170,6 +173,7 @@ public class kmeans {
 		return total;
 	}
 	
+	//lloyds_alg returns ArrayList of centers and the sum of the euclidean distances
 	static Pair<ArrayList<ArrayList<Double>>, Double> lloyds_alg(Matrix A, int K_)
 	{
 		
@@ -267,6 +271,7 @@ public class kmeans {
 		return new Pair<ArrayList<ArrayList<Double>>, Double>(cluster_centers, best_value);
 	}
 	
+	//generates the indicator matrix from the cluster centers
 	static Matrix get_ind(Matrix A, int K_, ArrayList<ArrayList<Double>> cluster_centers, int m, int n)
 	{
 		double[][] ind_arr = new double[m][K_];
@@ -306,6 +311,7 @@ public class kmeans {
 		return ind_mat;
 	}
 	
+	//uses the definition from the paper to get a value
 	static double get_F(Matrix A, int K_, Matrix ind, int m, int n)
 	{
 		return Math.pow((A.minus((ind.times(ind.transpose())).times(A))).normF(),2);
@@ -355,6 +361,7 @@ public class kmeans {
 			}
 		}
 		ArrayList<ArrayList<ArrayList<Double>>> centers2 = listPermutations(temp_center);
+		//We want the best cluster permutations since they are different way to assign points to clusters
 		for(int a = 0; a < centers2.size(); a++)
 		{
 			good = 0;
